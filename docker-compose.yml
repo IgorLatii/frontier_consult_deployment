@@ -11,7 +11,7 @@ services:
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     volumes:
-      - ./initdb:/docker-entrypoint-initdb.d
+      - ./initdb/Dump20250413:/docker-entrypoint-initdb.d
       - mysql_data:/var/lib/mysql
     ports:
       - "3306:3306"
@@ -43,7 +43,7 @@ services:
 #      - "8001:8000"
 
   bot:
-    image: ghcr.io/igor/telegram-bot:latest
+    image: ghcr.io/igorlatii/telegram-bot:latest
     container_name: telegram_bot
     restart: unless-stopped
     environment:
