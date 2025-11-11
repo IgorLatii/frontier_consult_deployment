@@ -1,0 +1,50 @@
+version: "3.9"
+
+services:
+  mysql:
+    image: mysql:8
+    container_name: mysql_db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+
+  fastapi:
+    image: ghcr.io/igor/fastapi-ai:latest
+    container_name: ai_service
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+    depends_on:
+      - mysql
+    restart: unless-stopped
+
+  django:
+    image: ghcr.io/igor/django-admin:latest
+    container_name: admin_panel
+    environment:
+      DB_HOST: mysql
+      DB_NAME: ${MYSQL_DATABASE}
+      DB_USER: ${MYSQL_USER}
+      DB_PASS: ${MYSQL_PASSWORD}
+    depends_on:
+      - mysql
+    restart: unless-stopped
+    ports:
+      - "8001:8000"
+
+  bot:
+    image: ghcr.io/igor/telegram-bot:latest
+    container_name: telegram_bot
+    environment:
+      BOT_TOKEN: ${BOT_TOKEN}
+      AI_API_URL: http://fastapi:8000
+    depends_on:
+      - fastapi
+    restart: unless-stopped

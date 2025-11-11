@@ -1,0 +1,19 @@
+name: Upload DB Backup
+on:
+  workflow_dispatch:
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Create test file
+        run: echo "SELECT 1;" > test.sql && gzip test.sql
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mysql_backup
+          path: test.sql.gz
