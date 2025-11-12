@@ -5,7 +5,7 @@ services:
     restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DB}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
     volumes:
       - ./initdb/Dump20250413:/docker-entrypoint-initdb.d
       - mysql_data:/var/lib/mysql
