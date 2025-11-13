@@ -12,31 +12,34 @@ services:
     ports:
       - "3306:3306"
 
-#  fastapi:
-#    image: ghcr.io/igor/fastapi-ai:latest
-#    container_name: ai_service
-#    environment:
-#      MYSQL_HOST: mysql
-#      MYSQL_USER: ${MYSQL_USER}
-#      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-#      OPENAI_API_KEY: ${OPENAI_API_KEY}
-#    depends_on:
-#      - mysql
-#    restart: unless-stopped
+  fastapi:
+    image: ghcr.io/igorlatii/fastapi-ai:latest
+    container_name: ai_service
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+    depends_on:
+      - mysql
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
 
-#  django:
-#    image: ghcr.io/igor/django-admin:latest
-#    container_name: admin_panel
-#    environment:
-#      DB_HOST: mysql
-#      DB_NAME: ${MYSQL_DATABASE}
-#      DB_USER: ${MYSQL_USER}
-#      DB_PASS: ${MYSQL_PASSWORD}
-#    depends_on:
-#      - mysql
-#    restart: unless-stopped
-#    ports:
-#      - "8001:8000"
+  django:
+    image: ghcr.io/igorlatii/django-admin:latest
+    container_name: admin_panel
+    environment:
+      DB_HOST: mysql
+      DB_NAME: ${MYSQL_DATABASE}
+      DB_USER: ${MYSQL_USER}
+      DB_PASS: ${MYSQL_PASSWORD}
+    depends_on:
+      - mysql
+    restart: unless-stopped
+    ports:
+      - "8001:8001"
 
   bot:
     image: ghcr.io/igorlatii/telegram-bot:latest
