@@ -27,6 +27,8 @@ services:
     ports:
       - "8000:8000"
 
+
+
   django:
     image: ghcr.io/igorlatii/django-admin:latest
     container_name: admin_panel
